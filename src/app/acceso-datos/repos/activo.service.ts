@@ -9,7 +9,7 @@ import { Urls } from '../util/urls';
 import { catchError, map, finalize } from 'rxjs/operators';
 import { CodigoApp } from '../util/codigo-app';
 import { NgProgress, NgProgressRef } from '@ngx-progressbar/core';
-import { ActivoCampos } from '../util/entidades/activos';
+import { ActivoCampos } from '../util/entidades/activo-campos';
 import { Categoria } from '../models/categoria';
 import { Responsable } from '../models/responsable';
 

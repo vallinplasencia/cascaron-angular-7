@@ -9,7 +9,7 @@ import { FormBuilder, FormGroupDirective, Validators } from '@angular/forms';
 import { MatDialog, MatSnackBar, MatDatepickerInputEvent } from '@angular/material';
 import { ActivoService } from '../../../acceso-datos/repos/activo.service';
 import { DialogConfirmSimpleService } from '../../../util/services/dialog-confirm-simple.service';
-import { ActivoCampos } from '../../../acceso-datos/util/entidades/activos';
+import { ActivoCampos } from '../../../acceso-datos/util/entidades/activo-campos';
 import { CodigoApp } from '../../../acceso-datos/util/codigo-app';
 import { Util } from '../../../util/util';
 import { Activo } from '../../../acceso-datos/models/activo';

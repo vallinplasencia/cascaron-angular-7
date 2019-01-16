@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { ActivoCampos } from '../../acceso-datos/util/entidades/activos';
+import { ActivoCampos } from '../../acceso-datos/util/entidades/activo-campos';
 import { ItemData } from '../../acceso-datos/util/entidades/item-data';
 import { Errorr } from '../../acceso-datos/util/entidades/errorr';
 import { ActivoService } from '../../acceso-datos/repos/activo.service';

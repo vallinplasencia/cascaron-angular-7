@@ -14,7 +14,7 @@ import { ItemData } from '../../../acceso-datos/util/entidades/item-data';
 import { SnackbarErrorComponent } from '../../../template/snackbar/snackbar-error/snackbar-error.component';
 import { Categoria } from '../../../acceso-datos/models/categoria';
 import { Responsable } from '../../../acceso-datos/models/responsable';
-import { ActivoCampos } from '../../../acceso-datos/util/entidades/activos';
+import { ActivoCampos } from '../../../acceso-datos/util/entidades/activo-campos';
 import { ResponsablesDialogComponent } from '../../../configuracion/responsable/responsables-dialog/responsables-dialog.component';
 
 
@@ -149,6 +149,7 @@ export class ActivoNuevoComponent implements OnInit {
             formDirective.resetForm();
             this.activoForm.reset();
             this.nombRespSelecc = '';
+            this.esPrincipal.setValue(false);
 
             if (this.accion == 'salvar') {
               this.router.navigate([{ outlets: { primary: 'activos/activo', sidebar: 'activo' } }]);
