@@ -1,0 +1,69 @@
+.example-container {
+    position: relative;
+  }
+  
+  .example-table-container {
+    position: relative;
+    max-height: 400px;
+    min-height: 260px;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  .example-loading-shade, .sin-resultado {
+    margin-top: 65px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sin-resultado {
+    background: initial;
+  }
+  
+  .example-rate-limit-reached {
+    color: #980000;
+    max-width: 360px;
+    text-align: center;
+  }
+  
+  tr:hover{
+    background-color: rgb(240, 240, 240); 
+  }
+  
+  .mat-column-acciones{
+    width: 170px;
+    text-align: center;
+  }
+  
+  /* Column Widths */
+  .mat-column-numero {
+    width: 55px;
+    font-weight: bold;
+  }
+
+.mat-column-esPrincipal{
+  text-align: center;
+}
+
+.mat-column-unidades {
+  text-align: center;
+  padding-right: 3px;
+}
+  
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+    margin: 0;
+    padding: 0 20px;
+  }

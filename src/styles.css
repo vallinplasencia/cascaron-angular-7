@@ -4,10 +4,50 @@ html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
-/*************** Enlaces de la barra de navegacion ***************/
+/*************** Contenedor ***************/
+.container{
+    padding: 1px;
+}
+/*************** FIN Contenedor ***************/
+
+
+
+/*************** Rutas ***************/
 .router-active{
     background-color: brown !important;
 }
+/*************** FIN Rutas ***************/
+
+
+/*************** Listados ***************/
+.listado.card-header{
+    padding: 0.4rem; 
+}
+.listado.card-body{
+    padding: 0; 
+}
+
+a.ver.mat-icon-button, a.editar.mat-icon-button, a.eliminar.mat-icon-button{
+    border: 1px solid;
+    margin-right: 3px;
+    /* width: 28px;
+    height: 28px;
+    line-height: 28px; */
+}
+a.ver{
+    color: #6c757d;
+}
+a.ver:hover, a.editar:hover, a.eliminar:hover{
+    background-color: #d4dbdb;
+}
+a.editar{
+    color: #007bff;
+}
+a.eliminar, button.eliminar{
+    color: #dc3545;
+}
+
+/*************** FIN Listados ***************/
 
 /**************Sobreescribiendo estilos de bootstrap*************************/
 

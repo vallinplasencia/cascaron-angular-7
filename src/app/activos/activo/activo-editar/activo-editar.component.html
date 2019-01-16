@@ -1,0 +1,125 @@
+<div class="container">
+  <div class="card" *ngIf="item" [hidden]="enviando || ocurrioError">
+    <h5 class="card-header">
+      Editar Activo. <strong>{{item.nombre|uppercase}}</strong>.
+    </h5>
+    <div class="card-body">
+      <form [formGroup]="activoForm" (submit)="onSubmit(formDirectiva, $event)" #formDirectiva="ngForm">
+        <app-error-modelo *ngIf="errores" [errores]="errores"></app-error-modelo>
+        <div class="row">
+
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="nombre" required autocomplete="off" type="text" placeholder="Nombre">
+              <mat-error *ngIf="nombre.invalid">{{getErrorMessage('nombre')}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="unidades" required autocomplete="off" type="number" placeholder="Unidades">
+              <mat-error *ngIf="unidades.invalid">{{getErrorMessage('unidades')}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field>
+              <mat-select formControlName="categoriaId" required placeholder="Categoria">
+                <mat-option *ngFor="let cat of categorias" [value]="cat.id">{{cat.nombre}}</mat-option>
+              </mat-select>
+              <mat-error>{{getErrorMessage('categoriaId')}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field>
+              <input autocomplete="off" matInput [value]="nombRespSelecc" type="text" placeholder="Responsable" (keydown)="$event.preventDefault()">
+              <button *ngIf="nombRespSelecc" mat-button matSuffix mat-icon-button aria-label="Borrar responsable" (click)="borrarResponsable()"
+                type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+              <button mat-flat-button matSuffix (click)="abrirRespDialog()" type="button">Seleccionar</button>
+            </mat-form-field>
+          </div>
+          
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput [matDatepicker]="fechaAltaa" formControlName="fechaAlta" required placeholder="Fecha de alta">
+              <mat-datepicker-toggle matSuffix [for]="fechaAltaa"></mat-datepicker-toggle>
+              <mat-datepicker #fechaAltaa></mat-datepicker>
+              <mat-hint align="end">Formato de fecha DD/MM/AAAA</mat-hint>
+              <mat-error *ngIf="fechaAlta.invalid">{{getErrorMessage('fechaAlta')}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput (blur)="comprobarFecha('fechaBaja',$event)" [matDatepicker]="fechaBajaa" formControlName="fechaBaja" placeholder="Fecha de baja">
+              <mat-datepicker-toggle matSuffix [for]="fechaBajaa"></mat-datepicker-toggle>
+              <mat-datepicker #fechaBajaa></mat-datepicker>
+              <mat-hint align="end">Formato de fecha DD/MM/AAAA</mat-hint>
+              <mat-error *ngIf="fechaBaja.invalid">{{getErrorMessage('fechaBaja')}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-12">
+            <mat-checkbox formControlName="esPrincipal">Es principal</mat-checkbox>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-3">
+          <a mat-stroked-button routerLink="/activos/activo">
+            <mat-icon>arrow_back</mat-icon> Cancelar
+          </a>
+          <div>
+            <button [disabled]="!(activoForm.valid && hayCambiosForm())" mat-raised-button color="primary" type="submit" class="mr-2">
+              <mat-icon>save</mat-icon> Guardar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div [hidden]="!enviando">
+    <div class="card">
+      <h5 class="card-header">
+        Guardando datos
+      </h5>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-2 text-right">Activo:</dt>
+          <dd class="col-sm-10">{{nombre.value}}</dd>
+
+          <dt class="col-sm-2 text-right">Unidades:</dt>
+          <dd class="col-sm-10">{{unidades.value}}</dd>
+
+          <dt class="col-sm-2 text-right">Categoria:</dt>
+          <dd class="col-sm-10">{{textSelectSelecc('categorias')}}</dd>
+
+          <dt class="col-sm-2 text-right">Responsable:</dt>
+          <dd class="col-sm-10">{{nombRespSelecc?nombRespSelecc:'-'}}</dd>
+
+          <dt class="col-sm-2 text-right">Fecha de alta</dt>
+          <dd class="col-sm-10">{{fechaAlta.value|date:'d - MMMM - yyyy':'':'es-CU'}}</dd>
+
+          <dt class="col-sm-2 text-right">Es principal</dt>
+          <dd class="col-sm-10">{{esPrincipal.value?'Si':'No'}}</dd>
+
+        </dl>
+        <button mat-stroked-button type="button" (click)="cancelarEnvio()">
+          <mat-icon>arrow_back</mat-icon> Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="ocurrioError">
+    <h5 class="card-header">
+      Problema
+    </h5>
+    <div class="card-body">
+      <p style="color: #980000;">Ocurrió un problema. Inténtelo mas tarde.</p>
+      <a routerLink="/">Ir a la página de inicio.</a>
+    </div>
+  </div>
+
+</div>
+{{activoForm.value|json}} 
+{{fechaBaja.errors|json}}

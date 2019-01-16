@@ -1,0 +1,13 @@
+<div *ngIf="errores && mostrar" class="alert alert-danger alert-dismissible fade show" role="alert">
+  <h4 class="alert-heading">Errores de validación</h4>
+  <ng-container *ngFor="let campo of errores|keyvalue">
+    <ul class="list-unstyled">
+      <li *ngFor="let err of campo.value">
+        {{err}}
+      </li>
+    </ul>
+  </ng-container>
+  <button type="button" (click)="ocultarMensajes()" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>

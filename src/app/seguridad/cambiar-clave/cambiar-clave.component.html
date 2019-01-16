@@ -1,0 +1,66 @@
+<div class="container">
+  <div class="card" [hidden]="enviando">
+    <h5 class="card-header">
+      Cambiar clave.
+    </h5>
+    <div class="card-body">
+      <form [formGroup]="cambiarClaveForm" (submit)="onSubmit(formDirectiva)" #formDirectiva="ngForm">
+        <app-error-modelo *ngIf="errores" [errores]="errores"></app-error-modelo>
+        <div class="row">
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="oldPassword" required autocomplete="off" [type]="ocultarClave ? 'password' : 'text'"
+                placeholder="Clave actual">
+              <mat-icon matSuffix (click)="ocultarClave = !ocultarClave">{{ocultarClave ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-error *ngIf="oldPassword.invalid">{{getErrorMessage('oldPassword')}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="newPassword" required minlength="6" maxlength="100" autocomplete="off" [type]="ocultarNuevaClave ? 'password' : 'text'"
+                placeholder="Nueva clave">
+              <mat-icon matSuffix (click)="ocultarNuevaClave = !ocultarNuevaClave">{{ocultarNuevaClave ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-error *ngIf="newPassword.invalid">{{getErrorMessage('newPassword')}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="confirmPassword" autocomplete="off" [type]="ocultarNuevaClave ? 'password' : 'text'" placeholder="Confirmar nueva clave">
+              <mat-icon matSuffix (click)="ocultarNuevaClave = !ocultarNuevaClave">{{ocultarNuevaClave ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-error *ngIf="confirmPassword.invalid">{{getErrorMessage('confirmPassword')}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mt-3">
+          <a mat-stroked-button routerLink="/">
+            <mat-icon>arrow_back</mat-icon> Cancelar
+          </a>
+          <div>
+            <button [disabled]="!cambiarClaveForm.valid" mat-raised-button color="primary" type="submit" class="mr-2">
+              <mat-icon>save</mat-icon> Cambiar clave
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div [hidden]="!enviando">
+    <div class="card">
+      <h5 class="card-header">
+        Guardando datos
+      </h5>
+      <div class="card-body">
+        <p>
+          <strong>Cambiando su clave. Por favor espere.</strong>
+        </p>
+        <button mat-stroked-button type="button" (click)="cancelarEnvio()">
+          <mat-icon>arrow_back</mat-icon> Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <a class="nav-link" [routerLink]="['/xxx', { outlets: { sidebar: null } }]">UUU</a> -->
+

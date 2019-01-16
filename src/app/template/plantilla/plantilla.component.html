@@ -1,39 +1,69 @@
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" fixedInViewport="true"
-      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'"
-      [opened]="!(isHandset$ | async)">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="!(isHandset$ | async)">
     <mat-toolbar color="primary">
       <a mat-button routerLink=".">
-      <mat-icon>layers</mat-icon>
-      <span>Examen</span>
-    </a>
+        <mat-icon>layers</mat-icon>
+        <span>Examen</span>
+      </a>
     </mat-toolbar>
-    <mat-nav-list>      
+    <mat-nav-list>
       <router-outlet name="sidebar"></router-outlet>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <button
-        type="button"
-        aria-label="Toggle sidenav"
-        mat-icon-button
-        (click)="drawer.toggle()"
-        *ngIf="isHandset$ | async">
-        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-      </button>
+    <mat-toolbar color="primary" class="d-flex justify-content-between">
       <div>
-        <a mat-button routerLink=".">Activos</a>
-        <!-- <a mat-button [routerLink]="[{outlets:{primary: 'activos/activo', sidebar: ['activo']}}]" [class.router-active]="aplicarClaseCss('activos')">Activos</a> -->
-        <a mat-button routerLink=".">Evaluación</a>
-        <a mat-button routerLink=".">Riesgos</a>
+        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+
+        <a mat-button [routerLink]="[{outlets:{primary: 'activos/activo', sidebar: ['activo']}}]" [class.router-active]="aplicarClaseCss('activos')">Activos</a>
+        <!-- <a mat-button routerLink=".">Evaluación</a> -->
         <a mat-button [routerLink]="[{ outlets: { primary: 'configuracion/categoria', sidebar: ['configuracion'] } }]" [class.router-active]="aplicarClaseCss('configuracion')">Configuración</a>
+        <a mat-button [routerLink]="[{ outlets: { primary: 'seguridad/registrar', sidebar: ['seguridad'] } }]" [class.router-active]="aplicarClaseCss('seguridad')">Seguridad</a>
+        
+        
+        <a mat-button routerLink="./comprobar">Con acceso</a>
+        <a mat-button routerLink="comprobar">No autorizar</a>
         <!-- <a mat-button [routerLink]="[{ outlets: { primary: 'configuracion/categoria', sidebar: ['configuracion'] } }]" routerLinkActive="router-active">Configuración</a> -->
         <!-- <a routerLink="./responsable" routerLinkActive="router-active">Responsable</a> -->
       </div>
+      <div>
+        <!-- <button mat-icon-button (click)="loginForm()" [hidden]="isAutenticado()">
+          <mat-icon>person_outline</mat-icon>
+        </button> -->
+        <button mat-flat-button color="primary" [matMenuTriggerFor]="menu_unauth" [hidden]="isAutenticado()">
+          {{nombreUsuario()}}<mat-icon>person_outline</mat-icon>
+        </button>
+        <mat-menu #menu_unauth="matMenu">
+          <button mat-menu-item (click)="loginForm()">
+            <!-- <mat-icon>clear</mat-icon> -->
+            <span>Login</span>
+          </button>
+          <button mat-menu-item (click)="registrarForm()">
+            <!-- <mat-icon>clear</mat-icon> -->
+            <span>Registrar</span>
+          </button>
+        </mat-menu>
+        
+        <button mat-flat-button color="primary" [matMenuTriggerFor]="menu" [hidden]="!isAutenticado()">
+          {{nombreUsuario()}}<mat-icon>person</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="cambiarClaveForm()">
+                <!-- <mat-icon>clear</mat-icon> -->
+                <span>Cambiar clave</span>
+              </button>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>clear</mat-icon>
+            <span>Salir</span>
+          </button>
+        </mat-menu>
+      </div>
+
     </mat-toolbar>
-    <!-- Add Content Here -->
+    <!-- Contenido -->
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

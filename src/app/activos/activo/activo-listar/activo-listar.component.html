@@ -1,0 +1,131 @@
+<div class="container">
+  <div class="card" [hidden]="eliminando">
+    <div class="card-header listado">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5>Listado de Activos</h5>
+
+        <div>
+          <a mat-stroked-button class="mr-2" color="primary" [disabled]="isLoadingResults" href="{{urlExport()}}" target="_blank">
+            <mat-icon>save_alt</mat-icon> Descargar todos(Excel)
+          </a>
+          <a mat-stroked-button class="mr-2" color="primary" (click)="refrescar($event)" [disabled]="isLoadingResults">
+            <mat-icon>refresh</mat-icon> Refrescar
+          </a>
+          <a mat-stroked-button color="primary" routerLink="/activos/activo/nuevo">
+            <mat-icon>add</mat-icon> Nuevo activo
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="card-body listado">
+
+      <div class="example-container mat-elevation-z8">
+        <div class="example-loading-shade" *ngIf="isLoadingResults || ocurrioError">
+          <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+          <div class="example-rate-limit-reached" *ngIf="ocurrioError">
+            Imposible cargar los datos. Ocurrió un error.Inténtelo mas tarde.
+          </div>
+        </div>
+
+        <div class="sin-resultado" *ngIf="!ocurrioError && !isLoadingResults && !data.length">
+          <strong>No se encontraron resultados.</strong>
+        </div>
+
+        <mat-form-field>
+          <input matInput placeholder="Buscar activos" #input (keyup)="filtrar(input.value)">
+          <button *ngIf="input.value" mat-button matSuffix mat-icon-button aria-label="Borrar búsqueda" (click)="limpiarFiltro(input)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="example-table-container">
+
+          <table mat-table [dataSource]="data" class="example-table" matSort matSortActive="nombre" matSortDisableClear matSortDirection="asc">
+
+            <ng-container matColumnDef="numero">
+              <th mat-header-cell *matHeaderCellDef>#</th>
+              <td mat-cell *matCellDef="let num = index">{{num+1}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+              <td mat-cell *matCellDef="let row">
+                <a [routerLink]="['/activos/activo/editar/', row.id]">{{row.nombre}}</a>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="categoria">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Categoria</th>
+              <td mat-cell *matCellDef="let row">{{row.categoria.nombre}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="esPrincipal">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Es Principal</th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{row.esPrincipal}} -->
+                <mat-icon style="color: green" *ngIf="row.esPrincipal">check</mat-icon>
+                <mat-icon *ngIf="!row.esPrincipal">remove</mat-icon>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaAlta">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Alta</th>
+              <td mat-cell *matCellDef="let row">{{row.fechaAlta|date:'d - MMM - yyyy':'':'es-CU'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaBaja">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Baja</th>
+              <td mat-cell *matCellDef="let row">{{row.fechaBaja|date:'d - MMM - yyyy':'':'es-CU'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="responsable">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Responsable</th>
+              <td mat-cell *matCellDef="let row">{{row.responsable?.nombre}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="unidades">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Unidades</th>
+              <td mat-cell *matCellDef="let row">{{row.unidades}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let row;">
+
+                <a mat-icon-button [routerLink]="['/activos/activo/editar/', row.id]" class="ver">
+                  <mat-icon>edit</mat-icon>
+                </a>
+                <a mat-icon-button [routerLink]="['/activos/activo', row.id]" class="editar">
+                  <mat-icon>visibility</mat-icon>
+                </a>
+                <a mat-icon-button (click)="confirmarEliminacion($event, row.id, row.nombre)" class="eliminar">
+                  <mat-icon>delete</mat-icon>
+                </a>
+
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+          </table>
+        </div>
+        <mat-paginator [length]="totalItems" [pageSize]="opcsPageSize[0]" [pageSizeOptions]="opcsPageSize"></mat-paginator>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="eliminando">
+    <div class="card">
+      <h5 class="card-header">
+        Eliminando activo
+      </h5>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-2 text-right">Activo:</dt>
+          <dd class="col-sm-10">{{activoAEliminar}}</dd>
+        </dl>
+        <button mat-stroked-button type="button" (click)="cancelarEliminacion()">
+          <mat-icon>arrow_back</mat-icon> Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

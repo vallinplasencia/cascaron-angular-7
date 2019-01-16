@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="mx-auto mt-3" style="width: 500px;">
+    <div class="card" [hidden]="enviando">
+      <h5 class="card-header">
+        Login.
+      </h5>
+      <div class="card-body">
+        <form [formGroup]="loginForm" (submit)="onSubmit(formDirectiva)" #formDirectiva="ngForm">
+          <app-error-modelo *ngIf="errores" [errores]="errores"></app-error-modelo>
+          <div class="row">
+            <div class="col-12">
+
+              <mat-form-field>
+                <input matInput formControlName="usuario" type="text" placeholder="Escriba su correo electrónico">
+                <mat-error *ngIf="usuario.invalid">{{getErrorMessage('usuario')}}</mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input matInput formControlName="clave" autocomplete="off" [type]="ocultarClave ? 'password' : 'text'" placeholder="Escriba su clave">
+                <mat-icon matSuffix (click)="ocultarClave = !ocultarClave">{{ocultarClave ? 'visibility_off' : 'visibility'}}</mat-icon>
+                <mat-error *ngIf="clave.invalid">{{getErrorMessage('clave')}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-3">
+            <a mat-stroked-button routerLink="/">
+              <mat-icon>arrow_back</mat-icon> Cancelar
+            </a>
+            <div>
+              <button [disabled]="!loginForm.valid" mat-raised-button color="primary" type="submit" class="mr-2">
+                <mat-icon>check</mat-icon> Login
+              </button>
+            </div>
+          </div>
+          <br>
+          <a cl routerLink="/seguridad/registrar">Crear una cuenta nueva</a>
+        </form>
+      </div>
+    </div>
+
+    <div [hidden]="!enviando">
+      <div class="card">
+        <h5 class="card-header">
+          Autenticando
+        </h5>
+        <div class="card-body">
+          <dl class="row">
+            <dt class="col-sm-2 text-right">Usuario:</dt>
+            <dd class="col-sm-10">{{usuario.value}}</dd>
+          </dl>
+          <button mat-stroked-button type="button" (click)="cancelarEnvio()">
+            <mat-icon>arrow_back</mat-icon> Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

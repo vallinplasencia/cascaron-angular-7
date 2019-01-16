@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="card" *ngIf="categoria" [hidden]="eliminando">
+      <h5 class="card-header">
+        Datos de <strong>{{categoria.nombre}}</strong>.
+      </h5>
+      <div class="card-body">
+
+        <dl class="row">
+          <dt class="col-sm-2 text-right">Categoria:</dt>
+          <dd class="col-sm-10">{{categoria.nombre}}</dd>
+
+          <dt class="col-sm-2 text-right">Valor:</dt>
+          <dd class="col-sm-10">{{categoria.valor}}</dd>
+        </dl>
+        <div class="d-flex justify-content-end">
+          <a mat-stroked-button class="mr-2" color="primary" [routerLink]="['/configuracion/categoria/editar', categoria.id]">
+            <mat-icon>edit</mat-icon> Editar
+          </a>
+          <a  mat-stroked-button class="eliminar mr-2" (click)="confirmarEliminacion()">
+            <mat-icon>delete</mat-icon> Eliminar
+          </a>
+          <a mat-raised-button color="primary" routerLink="/configuracion/categoria">
+            <mat-icon>check</mat-icon> Aceptar
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="categoria && eliminando" class="card">
+      <h5 class="card-header">
+        Eliminado categoria
+      </h5>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-2 text-right">Categoria:</dt>
+          <dd class="col-sm-10">{{categoria.nombre}}</dd>
+        </dl>
+        <button mat-stroked-button type="button" (click)="cancelarEliminacion()">
+          <mat-icon>arrow_back</mat-icon> Cancelar</button>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="!categoria">
+      <h5 class="card-header">
+        Problema
+      </h5>
+      <div class="card-body">
+        <p style="color: #980000;">Ocurrió un problema. Inténtelo mas tarde.</p>
+        <a routerLink="/">Ir a la página de inicio.</a>
+      </div>
+    </div>
+</div>

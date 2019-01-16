@@ -1,0 +1,102 @@
+<div class="container">
+  <div class="card" [hidden]="enviando || ocurrioError">
+    <h5 class="card-header">
+      Registrar usuario.
+    </h5>
+    <div class="card-body">
+      <form [formGroup]="registerForm" (submit)="onSubmit(formDirectiva)" #formDirectiva="ngForm">
+        <app-error-modelo *ngIf="errores" [errores]="errores"></app-error-modelo>
+        <div class="row">
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="email" required maxlength="100" autocomplete="off" type="email" placeholder="Correo electrónico">
+              <mat-error *ngIf="email.invalid">{{getErrorMessage('email')}}</mat-error>
+            </mat-form-field>
+          </div>
+          <!-- <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="password" required minlength="6" maxlength="100" autocomplete="off" type="password" placeholder="Clave">
+              <mat-error *ngIf="password.invalid">{{getErrorMessage('password')}}</mat-error>
+            </mat-form-field>
+          </div> -->
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="password" required minlength="6" maxlength="100" autocomplete="off" [type]="ocultarClave ? 'password' : 'text'"
+                placeholder="Clave">
+              <mat-icon matSuffix (click)="ocultarClave = !ocultarClave">{{ocultarClave ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-error *ngIf="password.invalid">{{getErrorMessage('password')}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="confirmPassword" autocomplete="off" [type]="ocultarClave ? 'password' : 'text'" placeholder="Confirmar clave">
+              <mat-icon matSuffix (click)="ocultarClave = !ocultarClave">{{ocultarClave ? 'visibility_off' : 'visibility'}}</mat-icon>
+              <mat-error *ngIf="confirmPassword.invalid">{{getErrorMessage('confirmPassword')}}</mat-error>
+          </mat-form-field>
+
+
+            <!-- <div class="col-12" formArrayName="roles">
+                <mat-checkbox *ngFor="let interest of rolesCadena; let i = index" class="mr-5" (change)="onChangeCheckRole($event)" [value]="interest">{{interest}}</mat-checkbox>
+              
+            </div> -->
+
+            <fieldset>
+              <div class="row">
+                <legend class="col-form-label col-sm-2 pt-0">Roles</legend>
+                <div formArrayName="roles">
+                  <div class="col-12" *ngFor="let rol of rolesCadena; let i = index">
+                    <mat-checkbox class="mr-5" (change)="onChangeCheckRole($event)" [value]="rol">{{rol}}</mat-checkbox>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-3">
+          <a mat-stroked-button routerLink="/">
+            <mat-icon>arrow_back</mat-icon> Cancelar
+          </a>
+          <div>
+            <button (click)="accion='salvar'" [disabled]="!registerForm.valid" mat-raised-button color="primary" type="submit" class="mr-2">
+              <mat-icon>save</mat-icon> Registrar
+            </button>
+            <button (click)="accion='salvarYnuevo'" [disabled]="!registerForm.valid" mat-raised-button color="primary" type="submit">
+              <mat-icon>save</mat-icon> Registrar y Nuevo
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div [hidden]="!enviando">
+    <div class="card">
+      <h5 class="card-header">
+        Registrando el usuario
+      </h5>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-2 text-right">Correo electrónico:</dt>
+          <dd class="col-sm-10">{{email.value}}</dd>
+        </dl>
+        <button mat-stroked-button type="button" (click)="cancelarEnvio()">
+          <mat-icon>arrow_back</mat-icon> Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="ocurrioError">
+    <h5 class="card-header">
+      Problema
+    </h5>
+    <div class="card-body">
+      <p style="color: #980000;">Ocurrió un problema. Inténtelo mas tarde.</p>
+      <a routerLink="/">Ir a la página de inicio.</a>
+    </div>
+  </div>
+
+</div>
+<!-- <button type="button" (click)="vaciarRolesForm()">HHH</button> -->
+{{registerForm.value|json}}

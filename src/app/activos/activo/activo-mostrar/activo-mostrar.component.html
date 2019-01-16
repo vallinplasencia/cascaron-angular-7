@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="card" *ngIf="activo" [hidden]="eliminando">
+    <h5 class="card-header">
+      Datos de <strong>{{activo.nombre}}</strong>.
+    </h5>
+    <div class="card-body">
+
+      <dl class="row">
+        <dt class="col-sm-2 text-right">Activo:</dt>
+        <dd class="col-sm-10">{{activo.nombre}}</dd>
+
+        <dt class="col-sm-2 text-right">Categoria:</dt>
+        <dd class="col-sm-10">{{activo.categoria.nombre}}</dd>
+
+        <dt class="col-sm-2 text-right">Responsable:</dt>
+        <dd class="col-sm-10">{{activo.responsable?activo.responsable.nombre:'-'}}</dd>
+
+        <dt class="col-sm-2 text-right">Es principal:</dt>
+        <dd class="col-sm-10">{{activo.esPrincipal?'Si':'No'}}</dd>
+
+        <dt class="col-sm-2 text-right">Fecha de alta:</dt>
+        <dd class="col-sm-10">{{activo.fechaAlta|date:'d - MMMM - yyyy':'':'es-CU'}}</dd>
+
+        <dt class="col-sm-2 text-right">Fecha de baja:</dt>
+        <dd class="col-sm-10">{{activo.fechaBaja?(activo.fechaBaja|date:'d - MMMM - yyyy':'':'es-CU'):'No se la ha dado de baja'}}</dd>
+
+        <dt class="col-sm-2 text-right">Unidades:</dt>
+        <dd class="col-sm-10">{{activo.unidades}}</dd>
+        
+      </dl>
+      <div class="d-flex justify-content-end">
+        <a mat-stroked-button class="mr-2" color="primary" [routerLink]="['/activos/activo/editar', activo.id]">
+          <mat-icon>edit</mat-icon> Editar
+        </a>
+        <a  mat-stroked-button class="eliminar mr-2" (click)="confirmarEliminacion()">
+          <mat-icon>delete</mat-icon> Eliminar
+        </a>
+        <a mat-raised-button color="primary" routerLink="/activos/activo">
+          <mat-icon>check</mat-icon> Aceptar
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activo && eliminando" class="card">
+    <h5 class="card-header">
+      Eliminado activo
+    </h5>
+    <div class="card-body">
+      <dl class="row">
+        <dt class="col-sm-2 text-right">Activo:</dt>
+        <dd class="col-sm-10">{{activo.nombre}}</dd>
+
+        <dt class="col-sm-2 text-right">Categoria:</dt>
+        <dd class="col-sm-10">{{activo.categoria.nombre}}</dd>
+
+        <dt class="col-sm-2 text-right">Responsable:</dt>
+        <dd class="col-sm-10">{{activo.responsable?activo.responsable.nombre:'-'}}</dd>
+
+      </dl>
+      <button mat-stroked-button type="button" (click)="cancelarEliminacion()">
+        <mat-icon>arrow_back</mat-icon> Cancelar</button>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="!activo">
+    <h5 class="card-header">
+      Problema
+    </h5>
+    <div class="card-body">
+      <p style="color: #980000;">Ocurrió un problema. Inténtelo mas tarde.</p>
+      <a routerLink="/">Ir a la página de inicio.</a>
+    </div>
+  </div>
+</div>

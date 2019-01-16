@@ -3,6 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../acceso-datos/seguridad/auth.service';
 
 @Component({
   selector: 'app-plantilla',
@@ -17,10 +18,52 @@ export class PlantillaComponent {
     );
 
   constructor(
+    private auth:AuthService, 
     private breakpointObserver: BreakpointObserver,
     private router: Router,
-    private route: ActivatedRoute) {}
+    private route: ActivatedRoute) { }
 
+    /**
+   * Redirecciona a la pagina de registrar usuario
+   */
+  registrarForm() {
+    this.router.navigate([{ outlets: { primary: 'seguridad/registrar', sidebar: ['seguridad'] } }]);
+  }
+
+  /**
+   * Redirecciona a la pagina de login
+   */
+  loginForm() {
+    this.router.navigate([{ outlets: { primary: 'login', sidebar: null } }]);
+  }
+
+  /**
+   * Redirecciona a la pagina de cambiar clave
+   */
+  cambiarClaveForm() {
+    this.router.navigate([{ outlets: { primary: 'cambiar-clave', sidebar: null } }]);
+  }
+
+  /**
+   * Redirecciona a la pagina de logout y desloguea al usuario
+   */
+  logout() {
+    this.router.navigate([{ outlets: { primary: 'logout', sidebar: null } }]);
+  }
+
+  /**
+   * Retorna true si el usuario esta autenticado
+   */
+  isAutenticado():boolean{
+    return this.auth.isAutenticado();
+  }
+
+  /**
+   * Retorna el nombre del usuario autenticado
+   */
+  nombreUsuario(){
+    return this.auth.getNombreUsuario();
+  }
 
   /**
    * Clase css q se aplica a los item de la barra superior de navegacion.
@@ -37,18 +80,24 @@ export class PlantillaComponent {
 
       if (segmentoUrl.length) {
         let segmentoInicial = segmentoUrl.shift();
-        
+
         switch (menuPrincipal) {
-        // switch (menuPrincipal) {
+          // switch (menuPrincipal) {
           case 'configuracion': {
             aplicar = segmentoUrl.some((segmento, idx) => {
               return (idx == 0) && (segmento.startsWith('categoria') || segmento.startsWith('proceso') || segmento.startsWith('responsable') || segmento.startsWith('metodologia'));
             });
             break;
           }
-          case 'activos': {            
+          case 'activos': {
             aplicar = segmentoUrl.some((segmento, idx) => {
               return (idx == 0) && (segmento.startsWith('activo') || segmento.startsWith('analisis'));
+            });
+            break;
+          }
+          case 'seguridad': {
+            aplicar = segmentoUrl.some((segmento, idx) => {
+              return (idx == 0) && (segmento.startsWith('seguridad') || segmento.startsWith('registrar'));
             });
             break;
           }

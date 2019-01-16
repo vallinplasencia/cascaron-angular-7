@@ -34,5 +34,50 @@ export interface ItemData<T> {
 
     //********Los siguientes datos estan solo en los listar q estan paginados.****//
     
+    /**
+     * Objeto q contiene las url del paginador q apunta a la primer pagina, ultima, ....
+     */
+    links?: {
+        first: string,
+        last: string,
+        prev: string,
+        next: string
+    }
+
+    /**
+     * Informacion adicional.
+     * - current_page -
+     * - from -
+     * - last_page - 
+     * - path - 
+     * - per_page - 
+     * - to - 
+     * - total - 
+     */
+    meta?: {
+        current_page?: number,
+        from?: number,
+        last_page?: number,
+        path?: string,
+        per_page?: number,
+        to?: number,
+        total: number
+    }
+
+    // "links": {
+    //     "first": "http://riesgos-backend.mii/api/categoria?page=1",
+    //     "last": "http://riesgos-backend.mii/api/categoria?page=12",
+    //     "prev": null,
+    //     "next": "http://riesgos-backend.mii/api/categoria?page=2"
+    // },
+    // "meta": {
+    //     "current_page": 1,
+    //     "from": 1,
+    //     "last_page": 12,
+    //     "path": "http://riesgos-backend.mii/api/categoria",
+    //     "per_page": 10,
+    //     "to": 10,
+    //     "total": 117
+    // }
     
 }

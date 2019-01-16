@@ -1,0 +1,102 @@
+<div class="container">
+  <div class="card" [hidden]="eliminando">
+    <div class="card-header listado">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5>Listado de Categorias</h5>
+
+        <div>
+          <a mat-stroked-button class="mr-2" color="primary" [disabled]="isLoadingResults" href="{{urlExport()}}" target="_blank">
+            <mat-icon>save_alt</mat-icon> Descargar todos(Excel)
+          </a>
+          <a mat-stroked-button class="mr-2" color="primary" (click)="refrescar($event)" [disabled]="isLoadingResults">
+            <mat-icon>refresh</mat-icon> Refrescar
+          </a>
+          <a mat-stroked-button color="primary" routerLink="/configuracion/categoria/nueva">
+            <mat-icon>add</mat-icon> Nueva categoria
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="card-body listado">
+
+      <div class="example-container mat-elevation-z8">
+        <div class="example-loading-shade" *ngIf="isLoadingResults || ocurrioError">
+          <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+          <div class="example-rate-limit-reached" *ngIf="ocurrioError">
+            Imposible cargar los datos. Ocurrió un error.Inténtelo mas tarde.
+          </div>
+        </div>
+        
+        <div class="sin-resultado" *ngIf="!ocurrioError && !isLoadingResults && !data.length">
+         <strong>No se encontraron resultados.</strong>
+        </div>
+
+        <mat-form-field>
+          <input matInput placeholder="Buscar categorias" #input (keyup)="filtrar(input.value)">
+          <button *ngIf="input.value" mat-button matSuffix mat-icon-button aria-label="Borrar búsqueda" (click)="limpiarFiltro(input)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="example-table-container">
+
+          <table mat-table [dataSource]="data" class="example-table" matSort matSortActive="nombre" matSortDisableClear matSortDirection="asc">
+
+            <ng-container matColumnDef="numero">
+              <th mat-header-cell *matHeaderCellDef>#</th>
+              <td mat-cell *matCellDef="let num = index">{{num+1}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="nombre">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+              <td mat-cell *matCellDef="let row">
+                <a [routerLink]="['/configuracion/categoria/editar/', row.id]">{{row.nombre}}</a>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="valor">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+              <td mat-cell *matCellDef="let row">{{row.valor}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let row;">
+
+                <a mat-icon-button [routerLink]="['/configuracion/categoria/editar/', row.id]" class="ver">
+                  <mat-icon>edit</mat-icon>
+                </a>
+                <a mat-icon-button [routerLink]="['/configuracion/categoria', row.id]" class="editar">
+                  <mat-icon>visibility</mat-icon>
+                </a>
+                <a mat-icon-button (click)="confirmarEliminacion($event, row.id, row.nombre)" class="eliminar">
+                  <mat-icon>delete</mat-icon>
+                </a>
+
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+          </table>
+        </div>
+        <mat-paginator [length]="totalItems" [pageSize]="opcsPageSize[0]" [pageSizeOptions]="opcsPageSize"></mat-paginator>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="eliminando">
+    <div class="card">
+      <h5 class="card-header">
+        Eliminando categoria
+      </h5>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-2 text-right">Categoria:</dt>
+          <dd class="col-sm-10">{{categoriaAEliminar}}</dd>
+        </dl>
+        <button mat-stroked-button type="button" (click)="cancelarEliminacion()">
+          <mat-icon>arrow_back</mat-icon> Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="container">
+  <div class="mx-auto mt-3" style="width: 500px;">
+
+    <div class="card" [hidden]="enviando || ocurrioError">
+      <h5 class="card-header">
+        Logout.
+      </h5>
+      <div class="card-body">
+        <p>
+          <strong>Usuario deslogueado correctamente</strong>
+        </p>
+        <a routerLink="/login">Ir a la página de login.</a>
+      </div>
+    </div>
+
+
+    <div [hidden]="!enviando || ocurrioError">
+      <div class="card">
+        <h5 class="card-header">
+          Logout
+        </h5>
+        <div class="card-body">
+          <p>
+            <strong>Deslogeando al usuario: {{nombreUsuario|uppercase}}</strong>
+          </p>
+          <button mat-stroked-button type="button" (click)="cancelarEnvio()">
+            <mat-icon>arrow_back</mat-icon> Cancelar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="ocurrioError">
+      <h5 class="card-header">
+        Problema
+      </h5>
+      <div class="card-body">
+        <p style="color: #980000;">Ocurrió un problema. Inténtelo mas tarde.</p>
+        <a routerLink="/">Ir a la página de inicio.</a>
+      </div>
+    </div>
+
+  </div>
+</div>

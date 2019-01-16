@@ -1,3 +1,26 @@
-<p>
-  home works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h4 class="mt-2">Pagina inicial de la App(Home)</h4>
+      <p class="my-3">
+        <strong>Descripcion del template(Menu).</strong>
+      </p>
+
+      <ul>
+        <li>
+          Menu Principal: Es el menu q se encuentra en la parte superior del template.
+          <br> En la parte derecha de este menu está el icono de autenticarse.
+        </li>
+        <li>
+          Menu Secundario: Es el menu q se encuentra en la parte lateral izquierda del template.
+        </li>
+        <li>
+          Otras acciones: Son acciones q se encuentran en la parte del contenido del template.
+        </li>
+      </ul>
+      <p *ngIf="!isAutenticado()">
+        <a routerLink="/login">Ir a la página de login.</a>
+      </p>
+    </div>
+  </div>
+</div>
