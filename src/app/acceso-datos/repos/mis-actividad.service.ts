@@ -339,4 +339,59 @@ export class MisActividadService {
         finalize(() => {this.progressRef.complete()})
       );
   }
+
+  /**
+   * Metodo que devuelve el listado de las tareas q todavia NO se han realizado o error 
+   * a traves de un Observable. 
+   * El listado devuelto va a cumplir con las restricciones pasadas por parametro.
+   * Retorna
+   * @param pagina 
+   * @param limite 
+   * @param campOrdenar 
+   * @param orden 
+   * @param filtro 
+   */
+  public misNotificaciones(
+    pagina: number, limite: number, campOrdenar: string = 'titulo', orden: ''|'asc' | 'desc' = 'asc', filtro: string = ''
+  ): Observable<ItemData<Tarea[] | Errorr>> {
+    // this.progressRef.start();
+    // this.progressRef.set(0);
+
+    let url = Urls.crearUrl(Urls.MIS_ACTIVIDADES);
+    orden = orden || "asc";
+    
+    let params = new HttpParams()
+      .set(Urls.PARAM_PAGINA, (pagina + 1).toString());
+      if(limite > 0){
+        params = params.set(Urls.PARAM_LIMITE, limite.toString());
+      }
+
+
+    params = params
+      .set(Urls.PARAM_ORDENAR_POR, campOrdenar)
+      .set(Urls.PARAM_ORDEN, orden);
+
+    if (filtro) {
+      params = params.set(Urls.PARAM_FILTRO, filtro);
+    }
+
+    return this.http
+      .get<Tarea[]>(`${url}/notificaciones`, { observe: 'response', params: params })
+      .pipe(
+        map(resp => {
+          let result: ItemData<Tarea[]>;
+          result = {
+            codigo: CodigoApp.OK,
+            data: resp.body as Tarea[],
+            meta: {
+              total: +resp.headers.get(Urls.HEADER_TOTAL_COUNT)
+            }
+          };
+          return result;
+        }),
+        catchError(this.handleError('misNotificaciones'))
+        // ,finalize(() => {this.progressRef.complete()})
+      );
+  }
+  
 }

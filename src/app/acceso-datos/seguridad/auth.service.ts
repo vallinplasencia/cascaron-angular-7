@@ -167,7 +167,7 @@ export class AuthService {
    */
   public getNombreUsuario(): string {
     const usuario = this.getUsuarioAuth();
-    return usuario ? usuario.userName : null;
+    return usuario ? usuario.userName.substring(0, usuario.userName.indexOf("@")) : null;
   }
 
   /**

@@ -31,6 +31,7 @@ import {
   MAT_DATE_FORMATS,
   MatMenuModule,
   MatRadioModule,
+  MatBadgeModule,
   //Fin Moment
 
 } from '@angular/material';
@@ -45,6 +46,8 @@ import {
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+
+    MatBadgeModule,
 
     MatSnackBarModule,
 
@@ -73,6 +76,8 @@ import {
     MatSidenavModule,
     MatIconModule,
     MatListModule,
+
+    MatBadgeModule,
 
     MatSnackBarModule,
 

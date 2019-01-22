@@ -20,7 +20,7 @@
 
         <a mat-button [routerLink]="[{outlets:{primary: 'actividades/actividad', sidebar: ['actividad']}}]" [class.router-active]="aplicarClaseCss('actividades')">Actividades</a>
         <a mat-button [routerLink]="[{outlets:{primary: 'mis-actividades/asignadas', sidebar: ['misactividad']}}]" [class.router-active]="aplicarClaseCss('misactividades')">Mis Actividades</a>
-        
+
         <!-- <a mat-button [routerLink]="[{outlets:{primary: 'activos/activo', sidebar: ['activo']}}]" [class.router-active]="aplicarClaseCss('activos')">Activos</a>
         <a mat-button [routerLink]="[{ outlets: { primary: 'configuracion/categoria', sidebar: ['configuracion'] } }]" [class.router-active]="aplicarClaseCss('configuracion')">Configuración</a>
         <a mat-button [routerLink]="[{ outlets: { primary: 'seguridad/registrar', sidebar: ['seguridad'] } }]" [class.router-active]="aplicarClaseCss('seguridad')">Seguridad</a>
@@ -34,7 +34,8 @@
           <mat-icon>person_outline</mat-icon>
         </button> -->
         <button mat-flat-button color="primary" [matMenuTriggerFor]="menu_unauth" [hidden]="isAutenticado()">
-          {{nombreUsuario()}}<mat-icon>person_outline</mat-icon>
+          {{nombreUsuario()}}
+          <mat-icon>person_outline</mat-icon>
         </button>
         <mat-menu #menu_unauth="matMenu">
           <button mat-menu-item (click)="loginForm()">
@@ -46,15 +47,26 @@
             <span>Registrar</span>
           </button>
         </mat-menu>
-        
+
+        <button mat-flat-button color="primary" [matMenuTriggerFor]="notificaciones" [hidden]="!isAutenticado()">
+          <mat-icon *ngIf="totalItems" matBadge="{{totalItems}}" matBadgeColor="warn">notifications</mat-icon>
+          <mat-icon *ngIf="!totalItems" >notifications</mat-icon>
+        </button>
+
+        <mat-menu #notificaciones="matMenu">
+          <button *ngIf="!totalItems">Sin tareas a realizar</button>
+          <button mat-menu-item *ngFor="let t of data" (click)="verMisActividades()">{{t.nombre}}</button>
+        </mat-menu>
+
         <button mat-flat-button color="primary" [matMenuTriggerFor]="menu" [hidden]="!isAutenticado()">
-          {{nombreUsuario()}}<mat-icon>person</mat-icon>
+          {{nombreUsuario()}}
+          <mat-icon>person</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="cambiarClaveForm()">
-                <!-- <mat-icon>clear</mat-icon> -->
-                <span>Cambiar clave</span>
-              </button>
+          <button mat-menu-item (click)="cambiarClaveForm()">
+            <!-- <mat-icon>clear</mat-icon> -->
+            <span>Cambiar clave</span>
+          </button>
           <button mat-menu-item (click)="logout()">
             <mat-icon>clear</mat-icon>
             <span>Salir</span>
