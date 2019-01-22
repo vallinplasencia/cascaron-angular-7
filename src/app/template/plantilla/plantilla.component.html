@@ -14,20 +14,20 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="d-flex justify-content-between">
       <div>
-        <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        <button type="button" aria-label="Toggle barra lateral" mat-icon-button (click)="drawer.toggle()" *ngIf="isHandset$ | async">
+          <mat-icon aria-label="Barra lateral toggle icon">menu</mat-icon>
         </button>
 
-        <a mat-button [routerLink]="[{outlets:{primary: 'activos/activo', sidebar: ['activo']}}]" [class.router-active]="aplicarClaseCss('activos')">Activos</a>
-        <!-- <a mat-button routerLink=".">Evaluación</a> -->
+        <a mat-button [routerLink]="[{outlets:{primary: 'actividades/actividad', sidebar: ['actividad']}}]" [class.router-active]="aplicarClaseCss('actividades')">Actividades</a>
+        <a mat-button [routerLink]="[{outlets:{primary: 'mis-actividades/asignadas', sidebar: ['misactividad']}}]" [class.router-active]="aplicarClaseCss('misactividades')">Mis Actividades</a>
+        
+        <!-- <a mat-button [routerLink]="[{outlets:{primary: 'activos/activo', sidebar: ['activo']}}]" [class.router-active]="aplicarClaseCss('activos')">Activos</a>
         <a mat-button [routerLink]="[{ outlets: { primary: 'configuracion/categoria', sidebar: ['configuracion'] } }]" [class.router-active]="aplicarClaseCss('configuracion')">Configuración</a>
         <a mat-button [routerLink]="[{ outlets: { primary: 'seguridad/registrar', sidebar: ['seguridad'] } }]" [class.router-active]="aplicarClaseCss('seguridad')">Seguridad</a>
         
         
         <a mat-button routerLink="./comprobar">Con acceso</a>
-        <a mat-button routerLink="comprobar">No autorizar</a>
-        <!-- <a mat-button [routerLink]="[{ outlets: { primary: 'configuracion/categoria', sidebar: ['configuracion'] } }]" routerLinkActive="router-active">Configuración</a> -->
-        <!-- <a routerLink="./responsable" routerLinkActive="router-active">Responsable</a> -->
+        <a mat-button routerLink="comprobar">No autorizar</a> -->
       </div>
       <div>
         <!-- <button mat-icon-button (click)="loginForm()" [hidden]="isAutenticado()">

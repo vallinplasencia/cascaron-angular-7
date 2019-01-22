@@ -1,0 +1,198 @@
+<div class="container">
+  <div class="card" *ngIf="item" [hidden]="enviando || ocurrioError">
+    <h5 class="card-header">
+      Editar Actividad.
+      <strong>{{item.nombre|uppercase}}</strong>.
+    </h5>
+    <div class="card-body">
+      <form [formGroup]="actividadForm" (submit)="onSubmit(formDirectiva, $event)" #formDirectiva="ngForm">
+        <app-error-modelo *ngIf="errores" [errores]="errores"></app-error-modelo>
+
+        <div class="row">
+
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput formControlName="titulo" required maxlength="100" autocomplete="off" type="text" placeholder="Título">
+              <mat-error *ngIf="titulo.invalid">{{getErrorMessage('titulo')}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field>
+              <!-- <input autocomplete="off" matInput required [value]="nombTrabSelecc" type="text" placeholder="Trabajador" (keydown)="$event.preventDefault()"> -->
+              <input matInput formControlName="trabajadorNombre" required autocomplete="off" type="text" placeholder="Asignar trabajador"
+                (keydown)="keyDownAbrirDialog($event)">
+              <button *ngIf="nombTrabSelecc" mat-button matSuffix mat-icon-button aria-label="Borrar trabajador" (click)="borrarTrabajador()"
+                type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+              <button mat-flat-button matSuffix (click)="abrirTrabDialog()" type="button">Seleccionar</button>
+              <mat-error *ngIf="trabajadorNombre.invalid">{{getErrorMessage('trabajadorNombre')}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput [matDatepicker]="fechaRegistroo" formControlName="fechaRegistro" required placeholder="Fecha de registro">
+              <mat-datepicker-toggle matSuffix [for]="fechaRegistroo"></mat-datepicker-toggle>
+              <mat-datepicker #fechaRegistroo></mat-datepicker>
+              <mat-hint align="end">Formato de fecha DD/MM/AAAA</mat-hint>
+              <mat-error *ngIf="fechaRegistro.invalid">{{getErrorMessage('fechaRegistro')}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field>
+              <input matInput placeholder="Creado por" disabled value="{{item.creadaPor.nombre}}">
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <mat-form-field>
+              <textarea matInput formControlName="descripcion" maxlength="500" placeholder="Descripción"></textarea>
+              <mat-error *ngIf="descripcion.invalid">{{getErrorMessage('descripcion')}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            <fieldset>
+              <div class="row">
+                <legend class="col-form-label col-2 pt-0">Estado</legend>
+                <div class="col-10">
+                  <mat-radio-group class="estado-radio-group" formControlName="estado" (change)="onChangeEstado($event)">
+                    <mat-radio-button class="estado-radio-button" *ngFor="let estad of estadosDeDisponAct" [value]="estad.id">
+                      {{estad.nombre}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+
+            </fieldset>
+            <!-- <mat-form-field>
+                    <input matInput formControlName="estado" required autocomplete="off" type="text" placeholder="Estado">
+                    <mat-error *ngIf="tNombre(i).invalid">{{getErrorMessage('tnombre', i)}}</mat-error>
+                  </mat-form-field> -->
+          </div>
+          <!-- <div class="col-12" *ngFor="let rol of todosLosEstados(); let i = index">
+                    <mat-checkbox class="mr-5" >xxxx</mat-checkbox>
+                  </div> -->
+          <div class="w-100"></div>
+          <div class="col" style="margin-bottom: 5px; border: 1px solid rgba(0,0,0,.125); border-radius: 4px;">
+
+            <div class="d-flex justify-content-between">
+              <div>
+                <strong>Tareas</strong>
+                <span [hidden]="item.tareas.length">(Sin tareas guardadas)</span>
+              </div>
+
+              <span style="color: #f44336;" *ngIf="actividadForm.errors?.sumaPorciento  && isPorcentajeTouchOrDirty()">
+                La sumatoia de los porcentajes de cada tarea tiene que ser 100%.
+              </span>
+              <button mat-button type="button" (click)="agregarNuevaTarea()" [disabled]="tareas.invalid || isCumplida()">
+                <mat-icon aria-label="Subir">add_circle_outline</mat-icon>
+                Nueva tarea
+              </button>
+            </div>
+            <hr style="margin: 0;">
+
+            <div class="row" formArrayName="tareas" appSumaPorcientoValidator>
+              <div class="col-6" [formGroupName]="i" *ngFor="let tarea of tareas.controls; let i=index">
+
+                <div class="row tareas">
+                  <div class="col-8">
+                    <mat-form-field>
+                      <input matInput formControlName="nombre" required autocomplete="off" type="text" placeholder="Tarea">
+                      <mat-error *ngIf="tNombre(i).invalid">{{getErrorMessage('tnombre', i)}}</mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-4">
+                    <mat-form-field>
+                      <input matInput formControlName="porcentaje" required max="100" min="1" autocomplete="off" type="number" placeholder="Porcentaje">
+                      <span matSuffix>%</span>
+                      <mat-hint *ngIf="porcentajeLibre()>0">Disponible {{porcentajeLibre()}}%</mat-hint>
+                      <mat-hint *ngIf="porcentajeLibre()==0">Porcentaje agotado</mat-hint>
+                      <!-- <mat-hint *ngIf="porcentajeLibre()<0">Re</mat-hint> -->
+                      <mat-error *ngIf="tPorcentaje(i).invalid">{{getErrorMessage('tporcentaje', i)}}</mat-error>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-8">
+                    <mat-checkbox formControlName="realizada" (change)="onChangeRealizado($event)">Tarea realizada</mat-checkbox>
+                  </div>
+
+                  <div class="col-4">
+                    <button mat-button class="d-xl-none" type="button" [disabled]="tareas.length==1" (click)="removerTarea(i)" style="margin-bottom: 5px;">
+                      <mat-icon aria-label="Remover tarea">remove_circle_outline</mat-icon>
+                      Remover
+                    </button>
+                    <button mat-button class="d-none d-xl-block" type="button" [disabled]="tareas.length==1" (click)="removerTarea(i)" style="margin-bottom: 5px;">
+                      <mat-icon aria-label="Remover tarea">remove_circle_outline</mat-icon>
+                      Remover tarea
+                    </button>
+                  </div>
+                </div>
+                <hr style="margin: 0;">
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between mt-3">
+          <a mat-stroked-button routerLink="/actividades/actividad">
+            <mat-icon>arrow_back</mat-icon> Cancelar
+          </a>
+          <div>
+            <button [disabled]="!(actividadForm.valid && hayCambiosForm())" mat-raised-button color="primary" type="submit" class="mr-2">
+              <mat-icon>save</mat-icon> Guardar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div [hidden]="!enviando">
+    <div class="card">
+      <h5 class="card-header">
+        Guardando datos
+      </h5>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-2 text-right">Actividad:</dt>
+          <dd class="col-sm-10">{{titulo.value}}</dd>
+
+          <!-- <dt class="col-sm-2 text-right">Unidades:</dt>
+            <dd class="col-sm-10">{{unidades.value}}</dd>
+  
+            <dt class="col-sm-2 text-right">Categoria:</dt>
+            <dd class="col-sm-10">{{textSelectSelecc('categorias')}}</dd>
+  
+            <dt class="col-sm-2 text-right">Responsable:</dt>
+            <dd class="col-sm-10">{{nombRespSelecc?nombRespSelecc:'-'}}</dd>
+  
+            <dt class="col-sm-2 text-right">Fecha de alta</dt>
+            <dd class="col-sm-10">{{fechaAlta.value|date:'d - MMMM - yyyy':'':'es-CU'}}</dd>
+  
+            <dt class="col-sm-2 text-right">Es principal</dt>
+            <dd class="col-sm-10">{{esPrincipal.value?'Si':'No'}}</dd> -->
+
+        </dl>
+        <button mat-stroked-button type="button" (click)="cancelarEnvio()">
+          <mat-icon>arrow_back</mat-icon> Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="ocurrioError">
+    <h5 class="card-header">
+      Problema
+    </h5>
+    <div class="card-body">
+      <p style="color: #980000;">Ocurrió un problema. Inténtelo mas tarde.</p>
+      <a routerLink="/">Ir a la página de inicio.</a>
+    </div>
+  </div>
+
+</div>
+{{actividadForm.value|json}}

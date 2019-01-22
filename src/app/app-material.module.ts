@@ -30,6 +30,7 @@ import {
   MAT_DATE_LOCALE,
   MAT_DATE_FORMATS,
   MatMenuModule,
+  MatRadioModule,
   //Fin Moment
 
 } from '@angular/material';
@@ -63,6 +64,7 @@ import {
     MatProgressSpinnerModule,
 
     MatMenuModule,
+    MatRadioModule,
   ],
   exports:[
     LayoutModule,
@@ -90,6 +92,7 @@ import {
     MatProgressSpinnerModule,
 
     MatMenuModule,
+    MatRadioModule,
   ],
   providers: [
     //Provider de moment

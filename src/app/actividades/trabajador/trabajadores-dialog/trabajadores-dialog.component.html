@@ -1,0 +1,57 @@
+<h2 mat-dialog-title style="margin-bottom: 0;">Seleccione un trabajador</h2>
+<mat-dialog-content>
+  <div class="example-container">
+    <div class="example-loading-shade" *ngIf="isLoadingResults || ocurrioError">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="ocurrioError">
+        Imposible cargar los datos. Ocurrió un error.Inténtelo mas tarde.
+      </div>
+    </div>
+  
+    <div class="sin-resultado" *ngIf="!ocurrioError && !isLoadingResults && !data.length">
+      <strong>No se encontraron resultados.</strong>
+    </div>
+  
+    <mat-form-field>
+      <input matInput placeholder="Buscar categorias" #input (keyup)="filtrar(input.value)">
+      <button *ngIf="input.value" mat-button matSuffix mat-icon-button aria-label="Borrar búsqueda" (click)="limpiarFiltro(input)">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  
+    <div class="example-table-container">
+  
+      <table mat-table [dataSource]="data" class="example-table" matSort matSortActive="nombre" matSortDisableClear matSortDirection="asc">
+  
+        <ng-container matColumnDef="numero">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let num = index">{{num+1}}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let row">
+            <strong>{{row.nombre}}</strong>
+          </td>
+        </ng-container>
+  
+        <ng-container matColumnDef="accion">
+          <th mat-header-cell *matHeaderCellDef>Accion</th>
+          <td mat-cell *matCellDef="let row;">
+            <button [mat-dialog-close]="row" mat-raised-button color="primary" title="Seleccionar">
+              <mat-icon>check</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+      </table>
+    </div>
+    <mat-paginator [length]="totalItems" [pageSize]="opcsPageSize[0]" [pageSizeOptions]="opcsPageSize"></mat-paginator>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cerrar</button>
+</mat-dialog-actions>
+

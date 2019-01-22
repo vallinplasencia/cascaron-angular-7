@@ -1,0 +1,152 @@
+<div class="container">
+  <div class="card" [hidden]="eliminando">
+    <div class="card-header listado">
+      <div class="d-flex justify-content-between align-items-center">
+        <h5>Listado de mis Actividades y sus tareas</h5>
+
+        <div>
+          <a mat-stroked-button class="mr-2" color="primary" (click)="refrescar($event)" [disabled]="isLoadingResults">
+            <mat-icon>refresh</mat-icon> Refrescar
+          </a>
+          <a mat-stroked-button color="primary" routerLink="/actividades/actividad/nueva">
+            <mat-icon>add</mat-icon> Nueva actividad
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="card-body listado">
+
+      <div class="example-container mat-elevation-z8">
+        <div class="example-loading-shade" *ngIf="isLoadingResults || ocurrioError">
+          <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+          <div class="example-rate-limit-reached" *ngIf="ocurrioError">
+            Imposible cargar los datos. Ocurrió un error.Inténtelo mas tarde.
+          </div>
+        </div>
+        <strong style="color: red">CLICK en una ACTIVIDAD(Fila) para ver sus tareas</strong>
+
+        <div class="sin-resultado" *ngIf="!ocurrioError && !isLoadingResults && !data.length">
+          <strong>No se encontraron resultados.</strong>
+        </div>
+
+        <mat-form-field>
+          <input matInput placeholder="Buscar actividades por título o descripción" #input (keyup)="filtrar(input.value)">
+          <button *ngIf="input.value" mat-button matSuffix mat-icon-button aria-label="Borrar búsqueda" (click)="limpiarFiltro(input)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="example-table-container">
+
+          <table mat-table [dataSource]="data" multiTemplateDataRows class="example-table" matSort matSortActive="titulo" matSortDisableClear
+            matSortDirection="asc">
+
+            <ng-container matColumnDef="numero">
+              <th mat-header-cell *matHeaderCellDef>#</th>
+              <td mat-cell *matCellDef="let row">{{row.posicion}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="titulo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Título</th>
+              <td mat-cell *matCellDef="let row">
+                <a [routerLink]="['/mis-actividades/asignadas', row.id]" (click)="$event.stopPropagation();">{{row.titulo}}</a>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="estado">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+              <td mat-cell *matCellDef="let row">
+                <span style="padding:.3em .9em; font-size: 90%; font-weight: normal;" [ngClass]="estilosEstado(row.estado)">{{estadoTexto(row.estado)}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fechaRegistro">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Alta</th>
+              <td mat-cell *matCellDef="let row">{{row.fechaRegistro|date:'d - MMM - yyyy':'':'es-CU'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="creada">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Creada por</th>
+              <td mat-cell *matCellDef="let row">{{row.creadaPor.nombre}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcion">
+              <th mat-header-cell *matHeaderCellDef>Descripción</th>
+              <td mat-cell *matCellDef="let row" title="{{row.descripcion}}">
+                {{(row.descripcion?.length > 12) ? ((row.descripcion| slice:0:12)+'...') : (row.descripcion) }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="acciones">
+              <th mat-header-cell *matHeaderCellDef>Acciones</th>
+              <td mat-cell *matCellDef="let row;">
+                <a mat-icon-button [routerLink]="['/mis-actividades/asignadas', row.id]" class="editar" (click)="$event.stopPropagation();">
+                  <mat-icon>visibility</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="expandedDetail">
+              <td mat-cell *matCellDef="let element" [attr.colspan]="columnas.length">
+                <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                  <strong *ngIf="!element?.tareas?.length" class="my-2 mx-5">Esta actividad no tiene tareas</strong>
+                  <table *ngIf="element?.tareas?.length" class="table table-sm table-hover">
+                    <thead class="table-info">
+                      <th>Nombre de la tarea</th>
+                      <th style="text-align: right;">Porcentaje</th>
+                      <th style="text-align: center;">Realizada</th>
+                      <th style="text-align: center;">Acción</th>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let tarea of element.tareas" class="table-info">
+                        <td>
+                          &#8594; {{tarea.nombre}}
+                        </td>
+                        <td style="text-align: right;">{{tarea.porcentaje}} %</td>
+                        <td style="text-align: center;">
+                          <mat-icon style="color: green" *ngIf="tarea.realizada">check</mat-icon>
+                          <mat-icon *ngIf="!tarea.realizada">remove</mat-icon>
+                        </td>
+                        <td style="text-align: center;">
+                          <button [disabled]="tarea.realizada" mat-flat-button color="primary" (click)="tareaRealizada(tarea)">Tarea realizada</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+            <tr mat-row *matRowDef="let element; columns: columnas;" class="example-element-row" [class.example-expanded-row]="expandedElement === element"
+              (click)="expandedElement = expandedElement === element ? null : element">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+
+            <!-- <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+            <tr mat-row *matRowDef="let row; columns: columnas;"></tr> -->
+          </table>
+        </div>
+        <mat-paginator [length]="totalItems" [pageSize]="opcsPageSize[0]" [pageSizeOptions]="opcsPageSize"></mat-paginator>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="eliminando">
+    <div class="card">
+      <h5 class="card-header">
+        Eliminando actividad
+      </h5>
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-2 text-right">Título:</dt>
+          <dd class="col-sm-10">{{actividadAEliminar}}</dd>
+        </dl>
+        <button mat-stroked-button type="button" (click)="cancelarEliminacion()">
+          <mat-icon>arrow_back</mat-icon> Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

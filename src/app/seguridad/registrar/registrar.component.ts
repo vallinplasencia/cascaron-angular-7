@@ -67,6 +67,7 @@ export class RegistrarComponent implements OnInit {
         switch (data.itemData.codigo) {
           case CodigoApp.OK: {
             this.rolesCadena = data.itemData.data as string[];
+            
             break;
           }
           default: {
@@ -98,7 +99,7 @@ export class RegistrarComponent implements OnInit {
             this.ocurrioError = false;
             setTimeout(() => {
               this.snackBar.openFromComponent(SnackbarOkComponent, {
-                data: ['Se registró correctamente el usuario:', categ.email],
+                data: ['Se registró correctamente con el usuario:', categ.email],
                 duration: Util.SNACKBAR_DURACION_OK,
               });
             });
@@ -106,7 +107,7 @@ export class RegistrarComponent implements OnInit {
             this.registerForm.reset();
 
             if (this.accion == 'salvar') {
-              this.router.navigate([{ outlets: { primary: null, sidebar: null } }]);
+              this.router.navigate([{ outlets: { primary: 'login', sidebar: null } }]);
             }
             break;
           }

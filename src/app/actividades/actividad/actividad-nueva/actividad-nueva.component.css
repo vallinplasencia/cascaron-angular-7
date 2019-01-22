@@ -1,0 +1,15 @@
+div.col-6 > * {
+    width: 100%;
+}
+
+dt.col-sm-2{
+  padding-right: 0;
+}
+
+mat-form-field button{
+  line-height: 0;
+}
+
+.tareas mat-form-field{
+  width: 100%;
+}

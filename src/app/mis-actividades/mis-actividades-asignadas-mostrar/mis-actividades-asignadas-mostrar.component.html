@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="card" *ngIf="actividad" [hidden]="eliminando">
+    <h5 class="card-header">
+      Datos de
+      <strong>{{actividad.titulo}}</strong>.
+    </h5>
+    <div class="card-body">
+
+      <dl class="row">
+        <dt class="col-sm-2 text-right">Actividad:</dt>
+        <dd class="col-sm-10">{{actividad.titulo}}</dd>
+
+        <dt class="col-sm-2 text-right">Creada por:</dt>
+        <dd class="col-sm-10">{{actividad.creadaPor?.nombre}}</dd>
+
+        <dt class="col-sm-2 text-right">Descripción:</dt>
+        <dd class="col-sm-10">{{actividad.descripcion?actividad.descripcion:'-'}}</dd>
+
+        <dt class="col-sm-2 text-right">Estado:</dt>
+        <dd class="col-sm-10">
+          <span style="padding:.3em .9em; font-size: 90%; font-weight: normal;" [ngClass]="estilosEstado(actividad.estado)">
+            {{estadoTexto(actividad.estado)}}
+          </span>
+        </dd>
+        <!--   
+          <dt class="col-sm-2 text-right">Es principal:</dt>
+          <dd class="col-sm-10">{{actividad.esPrincipal?'Si':'No'}}</dd> -->
+
+        <dt class="col-sm-2 text-right">Fecha de alta:</dt>
+        <dd class="col-sm-10">{{actividad.fechaRegistro|date:'d - MMMM - yyyy':'':'es-CU'}}</dd>
+
+        <dt class="col-sm-2 text-right">Tareas:</dt>
+        <dd class="col-sm-10" style="border-top: 1px solid rgba(0,0,0,.125);">          
+          <br>
+          <p *ngIf="!actividad.tareas?.length">Esta actividad no tiene tareas</p>
+          <table *ngIf="actividad.tareas?.length" class="table table-sm table-hover" style="width: 400px;">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Porcentaje</th>
+                <th scope="col">Realizada</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let t of actividad.tareas; let i=index">
+                  <th scope="row">{{i+1}}</th>
+                  <td>{{t.nombre}}</td>
+                  <td>{{t.porcentaje}} %</td>
+                  <td>
+                      <mat-icon style="color: green" *ngIf="t.realizada">check</mat-icon>
+                      <mat-icon *ngIf="!t.realizada">remove</mat-icon>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+          <!-- <ul class="list-unstyled" style="border-top: 1px solid rgba(0,0,0,.125);">
+              <li style="visibility: hidden;">a</li>
+              <li *ngFor="let t of actividad.tareas">{{t.nombre}}</li>
+            </ul> -->
+        </dd>
+
+      </dl>
+      <div class="d-flex justify-content-end">        
+        <a mat-raised-button color="primary" routerLink="/mis-actividades/asignadas">
+          <mat-icon>check</mat-icon> Aceptar
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="actividad && eliminando" class="card">
+    <h5 class="card-header">
+      Eliminado actividad
+    </h5>
+    <div class="card-body">
+      <dl class="row">
+        <dt class="col-sm-2 text-right">Actividad:</dt>
+        <dd class="col-sm-10">{{actividad.titulo}}</dd>
+
+        <dt class="col-sm-2 text-right">Creada por:</dt>
+        <dd class="col-sm-10">{{actividad.creadaPor?.nombre}}</dd>
+
+        <dt class="col-sm-2 text-right">Asignada a:</dt>
+        <dd class="col-sm-10">{{actividad.asignadaA?.nombre}}</dd>
+
+        <dt class="col-sm-2 text-right">Estado:</dt>
+        <dd class="col-sm-10">
+          <span style="padding:.3em .9em; font-size: 90%; font-weight: normal;" [ngClass]="estilosEstado(actividad.estado)">
+            {{estadoTexto(actividad.estado)}}
+          </span>
+        </dd>
+
+        
+      </dl>
+      <button mat-stroked-button type="button" (click)="cancelarEliminacion()">
+        <mat-icon>arrow_back</mat-icon> Cancelar</button>
+    </div>
+  </div>
+
+  <div class="card" *ngIf="!actividad">
+    <h5 class="card-header">
+      Problema
+    </h5>
+    <div class="card-body">
+      <p style="color: #980000;">Ocurrió un problema. Inténtelo mas tarde.</p>
+      <a routerLink="/">Ir a la página de inicio.</a>
+    </div>
+  </div>
+</div>

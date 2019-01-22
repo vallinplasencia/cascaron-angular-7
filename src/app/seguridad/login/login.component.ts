@@ -27,7 +27,8 @@ export class LoginComponent implements OnInit {
 
   loginForm = new FormGroup({
     usuario: new FormControl('', [Validators.required]),
-    clave: new FormControl('')
+    clave: new FormControl(''),
+    guardarCredenciales: new FormControl(false),
   });
 
   ocultarClave = true;
@@ -52,6 +53,7 @@ export class LoginComponent implements OnInit {
         this.enviando = false;
         switch (data.codigo) {
           case CodigoApp.OK: {
+            localStorage.setItem(Util.STORAGE_GUARDAR_CREDENCIALES, this.guardarCredenciales.value? "1":"")
             //Guardo los datos del usuario logueado incluyendo el token
             this.repo.salvarUsuarioAuth(data.data as UsuarioAuth)
             this.errores = null;
@@ -62,6 +64,7 @@ export class LoginComponent implements OnInit {
             // this.repo.redireccionarUrl = null;
             // // this.router.navigate([{ outlets: { primary: 'configuracion/categoria', sidebar: ['configuracion'] } }]);
 
+            
 
             // this.router.navigate(['/']);
             this.router.navigate([{ outlets: { primary: null, sidebar: null } }]);
@@ -95,6 +98,13 @@ export class LoginComponent implements OnInit {
    */
   get clave() {
     return this.loginForm.get('clave');
+  }
+
+  /**
+   * Retorna el campo Guardar Credenciales(FormControl)
+   */
+  get guardarCredenciales() {
+    return this.loginForm.get('guardarCredenciales');
   }
 
   /**

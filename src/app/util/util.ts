@@ -10,7 +10,10 @@ export class Util {
      * Claves de la api de Storage (Local Storage)
      */
     //Clave q se usa para almacenar los datos del usuario autenticado.
-    public static readonly LS_DATOS_USUARIO_AUTH = "usuario_autenticado";
+    public static readonly STORAGE_DATOS_USUARIO_AUTH = "usuario_autenticado";
+
+    //Guardar las credenciales para proximos inicios de session.
+    public static readonly STORAGE_GUARDAR_CREDENCIALES = "guardar_credenciales";
 
     /**
      * 

@@ -21,6 +21,9 @@
                 <mat-error *ngIf="clave.invalid">{{getErrorMessage('clave')}}</mat-error>
               </mat-form-field>
             </div>
+            <div class="12" style="padding-left: 15px;">
+              <mat-checkbox formControlName="guardarCredenciales">Guardar credenciales</mat-checkbox>
+            </div>
           </div>
 
           <div class="d-flex justify-content-between mt-3">

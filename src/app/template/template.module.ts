@@ -11,6 +11,8 @@ import { SidebarConfiguracionComponent } from './sidebar/sidebar-configuracion/s
 import { ErrorModeloComponent } from './error-modelo/error-modelo.component';
 import { SidebarActivosComponent } from './sidebar/sidebar-activos/sidebar-activos.component';
 import { SidebarSeguridadComponent } from './sidebar/sidebar-seguridad/sidebar-seguridad.component';
+import { SidebarActividadesComponent } from './sidebar/sidebar-actividades/sidebar-actividades.component';
+import { SidebarMisactividadesComponent } from './sidebar/sidebar-misactividades/sidebar-misactividades.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,7 @@ import { SidebarSeguridadComponent } from './sidebar/sidebar-seguridad/sidebar-s
     PageNotFoundComponent, 
     HomeComponent, 
     SidebarConfiguracionComponent, 
-    ErrorModeloComponent, SidebarActivosComponent, SidebarSeguridadComponent,
+    ErrorModeloComponent, SidebarActivosComponent, SidebarSeguridadComponent, SidebarActividadesComponent, SidebarMisactividadesComponent,
   ],
   imports: [
     CommonModule,

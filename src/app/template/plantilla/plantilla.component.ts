@@ -82,19 +82,19 @@ export class PlantillaComponent {
         let segmentoInicial = segmentoUrl.shift();
 
         switch (menuPrincipal) {
-          // switch (menuPrincipal) {
-          case 'configuracion': {
+          case 'actividades': {
             aplicar = segmentoUrl.some((segmento, idx) => {
-              return (idx == 0) && (segmento.startsWith('categoria') || segmento.startsWith('proceso') || segmento.startsWith('responsable') || segmento.startsWith('metodologia'));
+              return (idx == 0) && (segmento.startsWith('actividad'));
             });
             break;
           }
-          case 'activos': {
+          case 'misactividades': {
             aplicar = segmentoUrl.some((segmento, idx) => {
-              return (idx == 0) && (segmento.startsWith('activo') || segmento.startsWith('analisis'));
+              return (idx == 0) && (segmento.startsWith('asignadas'));
             });
             break;
           }
+          
           case 'seguridad': {
             aplicar = segmentoUrl.some((segmento, idx) => {
               return (idx == 0) && (segmento.startsWith('seguridad') || segmento.startsWith('registrar'));

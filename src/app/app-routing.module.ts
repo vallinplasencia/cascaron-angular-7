@@ -14,68 +14,50 @@ import { ComprobarComponent } from './comprobar/comprobar.component';
 import { RoleAutorizarGuard } from './util/guards/role-autorizar.guard';
 import { TipoRoles } from './util/tipo-roles';
 import { SidebarSeguridadComponent } from './template/sidebar/sidebar-seguridad/sidebar-seguridad.component';
+import { SidebarActividadesComponent } from './template/sidebar/sidebar-actividades/sidebar-actividades.component';
+import { SidebarMisactividadesComponent } from './template/sidebar/sidebar-misactividades/sidebar-misactividades.component';
 
 const routes: Routes = [
   {
     path: '',
     component: HomeComponent
   },
-  // {
-  //   path: 'login',
-  //   component: LoginComponent,
-  //   canActivate: [UsuarioNoAutenticadoGuard],
-  //   canDeactivate: [CanDeactivateGuard],
-  // },
-  // {
-  //   path: 'logout',
-  //   component: LogoutComponent,
-  //   canActivate: [UsuarioAutenticadoGuard],
-  //   canDeactivate: [CanDeactivateGuard],
-  // },
   {
-    path: 'comprobar',
-    component: ComprobarComponent,
-    // data:{
-    //   roles: [TipoRoles.ROLE_ADMIN]
-    // },
-    // canActivate: [RoleAutorizarGuard],
-  },
-  {
-    path: 'configuracion',
+    path: 'actividades',
     data:{
       roles: [
-        TipoRoles.ROLE_SUPER_ADMIN, 
+        TipoRoles.ROLE_ADMIN
+      ]
+    },
+    canActivate: [RoleAutorizarGuard],
+    loadChildren: "./actividades/actividades.module#ActividadesModule"
+  },
+  {
+    path: 'mis-actividades',
+    data:{
+      roles: [
         TipoRoles.ROLE_ADMIN, 
         TipoRoles.ROLE_USUARIO
       ]
     },
     canActivate: [RoleAutorizarGuard],
-    loadChildren: "./configuracion/configuracion.module#ConfiguracionModule"
-  },
-  {
-    path: 'activos',
-    data:{
-      roles: [
-        TipoRoles.ROLE_SUPER_ADMIN, 
-        TipoRoles.ROLE_ADMIN
-      ]
-    },
-    canActivate: [RoleAutorizarGuard],
-    loadChildren: "./activos/activos.module#ActivosModule"
+    loadChildren: "./mis-actividades/mis-actividades.module#MisActividadesModule"
   },
 
 
   //****Rutas de Sidebar. Rutas secundarias. Outlet nombrado con sidebar
   {
-    path: 'configuracion',
-    component: SidebarConfiguracionComponent,
+    path: 'actividad',
+    component: SidebarActividadesComponent,
     outlet: 'sidebar'
   },
   {
-    path: 'activo',
-    component: SidebarActivosComponent,
+    path: 'misactividad',
+    component: SidebarMisactividadesComponent,
     outlet: 'sidebar'
   },
+
+
   {
     path: 'seguridad',
     component: SidebarSeguridadComponent,

@@ -120,7 +120,10 @@ export class AuthService {
    * datos incluyendo el token. Si no se encuentra autenticado retorna NULL.
    */
   public getUsuarioAuth(): UsuarioAuth {
-    return JSON.parse(localStorage.getItem(Util.LS_DATOS_USUARIO_AUTH));
+    if (localStorage.getItem(Util.STORAGE_GUARDAR_CREDENCIALES)) {
+      return JSON.parse(localStorage.getItem(Util.STORAGE_DATOS_USUARIO_AUTH));
+    }
+    return JSON.parse(sessionStorage.getItem(Util.STORAGE_DATOS_USUARIO_AUTH));
   }
 
   /**
@@ -131,7 +134,11 @@ export class AuthService {
     if (Util.isObjVacio(datosUsuarioAuth)) {
       return false;
     }
-    localStorage.setItem(Util.LS_DATOS_USUARIO_AUTH, JSON.stringify(datosUsuarioAuth));
+    if (localStorage.getItem(Util.STORAGE_GUARDAR_CREDENCIALES)) {
+      localStorage.setItem(Util.STORAGE_DATOS_USUARIO_AUTH, JSON.stringify(datosUsuarioAuth));
+    } else {
+      sessionStorage.setItem(Util.STORAGE_DATOS_USUARIO_AUTH, JSON.stringify(datosUsuarioAuth));
+    }
     return true;
   }
 
@@ -140,7 +147,12 @@ export class AuthService {
    * Si todo fue bien retorna TRUE sino False.
    */
   public removerUsuarioAuth(): void {
-    localStorage.removeItem(Util.LS_DATOS_USUARIO_AUTH);
+    if (localStorage.getItem(Util.STORAGE_GUARDAR_CREDENCIALES)) {
+      localStorage.removeItem(Util.STORAGE_DATOS_USUARIO_AUTH);
+    } else {
+      sessionStorage.removeItem(Util.STORAGE_DATOS_USUARIO_AUTH);
+    }
+    localStorage.removeItem(Util.STORAGE_GUARDAR_CREDENCIALES);
   }
 
   /**
@@ -173,7 +185,7 @@ export class AuthService {
    * @param role Un role(string) o un arreglo de roles(string) a verificar si
    * por lo menos uno de ellos esta presente en los roles del usuario autenticado.
    */
-  public tieneRole(roles: string | string[]=[]): boolean {
+  public tieneRole(roles: string | string[] = []): boolean {
     if (!Array.isArray(roles)) {
       roles = [roles];
     }

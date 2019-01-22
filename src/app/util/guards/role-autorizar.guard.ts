@@ -34,6 +34,7 @@ export class RoleAutorizarGuard implements CanActivate {
           {
             duration: Util.SNACKBAR_DURACION_INFORMACION
           });
+          this.router.navigate([{ outlets: { primary: null, sidebar: null } }]);
       } else {
         // this.auth.redireccionarUrl = state.url;
         this.router.navigate([{ outlets: { primary: 'login', sidebar: null } }]);

@@ -25,6 +25,19 @@ export class Urls {
 
   public static readonly ACCOUNT = 'api/account';
 
+
+
+  public static readonly ACTIVIDADES = 'api/actividades';
+  public static readonly ACTIVIDADES_CAMPOS = 'api/actividades/actividad-campos';
+  public static readonly ACTIVIDADES_Y_CAMPOS = 'api/actividades/actividad-y-campos';
+
+  public static readonly MIS_ACTIVIDADES = 'api/mis-actividades';
+
+  public static readonly TRABAJADORES = 'api/trabajadores';
+
+
+
+
   public static readonly CATEGORIAS = 'api/categorias';
   public static readonly RESPONSABLES = 'api/responsables';
 
